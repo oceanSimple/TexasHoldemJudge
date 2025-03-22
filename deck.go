@@ -1,8 +1,9 @@
 package texas_holdem
 
 import (
+	"crypto/rand"
 	"fmt"
-	"math/rand"
+	"math/big"
 	"strings"
 )
 
@@ -10,7 +11,7 @@ type Deck struct {
 	Deck []Card
 }
 
-// Obtain a full deck of cards (excluding kings)
+// 获得一副牌(52张牌, 不包含大小王)
 func NewDeck() Deck {
 	var deck = Deck{
 		Deck: obtainNewDeck(),
@@ -21,15 +22,16 @@ func NewDeck() Deck {
 	return deck
 }
 
-// Sort all the cards, in the  order of ♠ ♥ ♦ ♣
+// 将牌按照数字大小进行排序
 func (deck *Deck) Sort() {
 	SortCard(deck.Deck)
 }
 
-// Shuffle the deck
+// 随机打乱牌的顺序
 func (deck *Deck) Shuffle() {
 	for i := len(deck.Deck) - 1; i > 0; i-- {
-		j := rand.Intn(i + 1)
+		jBig, _ := rand.Int(rand.Reader, big.NewInt(int64(i+1)))
+		j := int(jBig.Int64())
 		deck.Deck[i], deck.Deck[j] = deck.Deck[j], deck.Deck[i]
 	}
 }
