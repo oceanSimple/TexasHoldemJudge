@@ -9,17 +9,15 @@ type Hand struct {
 	Ranks []int // 用于比较的牌面值
 }
 
-// 根据 Cards 将 Type 和 Ranks 计算出来
-func (h *Hand) Handler() {
-	// 计算type
-	getMaxHandType(h)
-}
+func NewHand(cards []Card) *Hand {
+	var h = &Hand{}
 
-func getMaxHandType(h *Hand) {
+	// 根据 Cards 将 Type 和 Ranks 计算出来
 	h.Type = -1
 	// 从七张牌中挑选五张牌，共有 C(7,5)=21 种组合。
-	var combinations = getCombinations(h.Cards, 5)
+	var combinations = getCombinations(cards, 5)
 
+	// 遍历所有组合，计算牌型和对应的牌面值
 	for _, combo := range combinations {
 		var newType, newRanks = getTypeAndRanks(combo)
 		if newType > h.Type || (h.Type == newType && compareRanks(newRanks, h.Ranks) > 0) {
@@ -27,6 +25,8 @@ func getMaxHandType(h *Hand) {
 			h.Ranks = newRanks
 		}
 	}
+
+	return h
 }
 
 // 获得 C( len(cards) , k) 的组合
@@ -56,6 +56,9 @@ func getCombinations(cards []Card, k int) [][]Card {
 	return result          // 返回所有组合的结果
 }
 
+// 获取牌型和对应的牌面值
+// @param combination 牌组
+// @return 牌型和对应的牌面值
 func getTypeAndRanks(combination []Card) (int, []int) {
 	// 将数字部分单独存入ranks中
 	// 注意这里将A视为14
@@ -63,25 +66,63 @@ func getTypeAndRanks(combination []Card) (int, []int) {
 	for i, card := range combination {
 		ranks[i] = card.Number.Value
 	}
-	// 按照从大到小排序
+	// ranks按照从大到小排序
 	sort.Slice(ranks, func(i, j int) bool {
 		return ranks[i] > ranks[j]
 	})
+	// combinations按照数字从大到小排序
+	SortCard(combination)
 
-	var isFlush = handHandler.isFlush(combination)
-	var isStraight = handHandler.isStraight(ranks)
-	if isFlush && isStraight && ranks[0] == 14 { // 皇家同花顺
-		return ROYAL_FLUSH, ranks
-	} else if isFlush && isStraight { // 同花顺
-		return STRAIGHT_FLUSH, ranks
+	var ok, isFlushOk, isStraightOk bool
+	var numberArr []int
+
+	isFlushOk, numberArr = handHandler.isFlush(combination)
+	isStraightOk, numberArr = handHandler.isStraight(ranks)
+
+	// 皇家同花顺
+	if isFlushOk && isStraightOk && numberArr[0] == 14 {
+		return ROYAL_FLUSH, numberArr
 	}
-
-	return -1, ranks
+	// 同花顺
+	if isFlushOk && isStraightOk {
+		return STRAIGHT_FLUSH, numberArr
+	}
+	// 四条
+	if ok, numberArr = handHandler.isFourOfAKind(ranks); ok {
+		return FOUR_OF_A_KIND, numberArr
+	}
+	// 葫芦
+	if ok, numberArr = handHandler.isFullHouse(ranks); ok {
+		return FULL_HOUSE, numberArr
+	}
+	// 同花
+	if ok, numberArr = handHandler.isFlush(combination); ok {
+		return FLUSH, numberArr
+	}
+	// 顺子
+	if ok, numberArr = handHandler.isStraight(ranks); ok {
+		return STRAIGHT, numberArr
+	}
+	// 三条
+	if ok, numberArr = handHandler.isThreeOfAKind(ranks); ok {
+		return THREE_OF_A_KIND, numberArr
+	}
+	// 两对
+	if ok, numberArr = handHandler.isTwoPair(ranks); ok {
+		return TWO_PAIR, numberArr
+	}
+	// 一对
+	if ok, numberArr = handHandler.isOnePair(ranks); ok {
+		return ONE_PAIR, numberArr
+	}
+	// 高牌
+	return HIGH_CARD, ranks
 }
 
 // 比较两个牌型的大小
+// @return 1: ranks1 > ranks2, -1: ranks1 < ranks2, 0: ranks1 == ranks2
 func compareRanks(ranks1, ranks2 []int) int {
-	for i := 0; i < len(ranks1); i++ {
+	for i := 0; i < len(ranks1) && i < len(ranks2); i++ {
 		if ranks1[i] > ranks2[i] {
 			return 1
 		} else if ranks1[i] < ranks2[i] {

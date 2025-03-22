@@ -1,14 +1,22 @@
 package texas_holdem
 
-func getACard(str string) *Card {
+func getACard(str string) Card {
 	runes := []rune(str)
-	var color = getColor(string(runes[0]))   // Output: ♠
-	var number = getNumber(string(runes[1])) // Output: A
+	var color = getColor(string(runes[0]))    // Output: ♠
+	var number = getNumber(string(runes[1:])) // Output: A
 
-	return &Card{
+	return Card{
 		Color:  color,
 		Number: number,
 	}
+}
+
+func getCards(arr []string) []Card {
+	var cards []Card
+	for _, str := range arr {
+		cards = append(cards, getACard(str))
+	}
+	return cards
 }
 
 func getColor(color string) Color {
