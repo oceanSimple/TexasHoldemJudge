@@ -1,4 +1,4 @@
-module texas_holdem
+module github.com/oceanSimple/texas_holdem
 
 go 1.24.0
 
