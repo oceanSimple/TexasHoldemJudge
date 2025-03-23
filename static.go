@@ -36,3 +36,9 @@ const (
 	STRAIGHT_FLUSH         //  同花顺
 	ROYAL_FLUSH            //  皇家同花顺
 )
+
+// error string
+const (
+	ERROR_CARD_LENGTH_Empty = "cards can't be empty"
+	ERROR_CARD_LENGTH_7     = "card length must be 7"
+)

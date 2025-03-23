@@ -17,7 +17,7 @@ type Handler struct {
 
 func (h Handler) GetMaxCard(cardArr [][]Card) ([]int, error) {
 	if len(cardArr) == 0 {
-		return []int{-1}, errors.New("cardArr is empty")
+		return []int{-1}, errors.New(ERROR_CARD_LENGTH_Empty)
 	} else if len(cardArr) == 1 {
 		return []int{0}, nil
 	} else {
@@ -29,7 +29,7 @@ func (h Handler) GetMaxCard(cardArr [][]Card) ([]int, error) {
 				continue
 			}
 			if len(cards) != 7 {
-				return []int{-1}, errors.New("each card must be 7 cards")
+				return []int{-1}, errors.New(ERROR_CARD_LENGTH_7)
 			}
 			var flag, _ = h.CompareTwoCards(maxCard, cards)
 			if flag < 0 {
@@ -48,10 +48,10 @@ func (h Handler) GetMaxCard(cardArr [][]Card) ([]int, error) {
 func (h Handler) CompareTwoCards(c1, c2 []Card) (int, error) {
 	// 首先判断是否是一共七张牌
 	if len(c1) != 7 {
-		return 0, errors.New("c1 must be 7 cards")
+		return 0, errors.New(ERROR_CARD_LENGTH_7)
 	}
 	if len(c2) != 7 {
-		return 0, errors.New("c2 must be 7 cards")
+		return 0, errors.New(ERROR_CARD_LENGTH_7)
 	}
 
 	// 将 []Card 转换成 Hand
