@@ -36,6 +36,18 @@ func (deck *Deck) Shuffle() {
 	}
 }
 
+// 从牌堆中抽取指定数量的牌
+func (deck *Deck) Draw(num int) []Card {
+	if num > len(deck.Deck) {
+		num = len(deck.Deck)
+	}
+
+	drawnCards := deck.Deck[:num]
+	deck.Deck = deck.Deck[num:]
+
+	return drawnCards
+}
+
 func (deck *Deck) String() string {
 	var builder = strings.Builder{}
 
