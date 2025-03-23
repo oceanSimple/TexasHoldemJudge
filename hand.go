@@ -5,8 +5,15 @@ import "sort"
 // 定义手牌结构
 type Hand struct {
 	Cards []Card
-	Type  int   // 牌型
-	Ranks []int // 用于比较的牌面值
+
+	// 牌型
+	Type int // 牌型
+
+	// 用于比较的牌面值, 会根据type而决定牌的数量, 因此前端一般不需要
+	Ranks []int
+
+	// 最大的五张牌的组合
+	MaxCombination []Card
 }
 
 func NewHand(cards []Card) *Hand {
@@ -23,6 +30,7 @@ func NewHand(cards []Card) *Hand {
 		if newType > h.Type || (h.Type == newType && compareRanks(newRanks, h.Ranks) > 0) {
 			h.Type = newType
 			h.Ranks = newRanks
+			h.MaxCombination = combo
 		}
 	}
 
