@@ -1,8 +1,11 @@
-
-
 # ♾️项目介绍
 > 核心算法实现
 - 每个玩家一共七张牌(2张手牌+5张公共牌), 算法实现按照`德州扑克`游戏的规则进行大小比较
+
+> 导包
+```shell
+go get github.com/oceanSimple/texas_holdem
+```
 
 # ♾️核心类介绍
 ## 💫牌类
@@ -62,10 +65,10 @@ type Card struct {
 
 > 方法
 - `func NewCard(color Color, number Number) Card`
-    - 创建一张Card
+  - 创建一张Card
 - `func (c Card) String() string`
-    - 获得Card的字符串
-    - 例如: ♥8
+  - 获得Card的字符串
+  - 例如: ♥8
 
 
 ### Deck
@@ -82,13 +85,13 @@ type Deck struct {
 
 > 方法
 - `func NewDeck() Deck`
-    - 获取一个新的Deck
+  - 获取一个新的Deck
 - `func (deck *Deck) Sort()`
-    - 将deck中的牌按照数字的从大到小顺序排序
+  - 将deck中的牌按照数字的从大到小顺序排序
 - `func (deck *Deck) Shuffle()`
-    - 将deck中的牌随机打乱
+  - 将deck中的牌随机打乱
 - `func (deck *Deck) String()`
-    - 将deck中的牌按照每行13个的结构, 输出字符串
+  - 将deck中的牌按照每行13个的结构, 输出字符串
 
 ### Hand
 > 手牌类, 即玩家最大的五张牌组合
@@ -117,9 +120,9 @@ type Hand struct {
 
 > 方法
 - `func NewHand(cards []Card) *Hand`
-    - @param
-        - cards 传入七张牌, 2张手牌+5张公共牌
-    - @return 返回玩家最大的五张牌组合
+  - @param
+    - cards 传入七张牌, 2张手牌+5张公共牌
+  - @return 返回玩家最大的五张牌组合
 
 
 
@@ -237,10 +240,10 @@ const (
 ## 💫func GetACard(colorStr, numberStr string) Card
 - 根据color和number获得一张Card
 - @param
-    - colorStr: color的名称
-    - numberStr: number的名称
+  - colorStr: color的名称
+  - numberStr: number的名称
 - @return
-    - 返回Card
+  - 返回Card
 
 ```go
 card := texas_holdem.GetACard(texas_holdem.COLOR_HEART, texas_holdem.NUMBER_8)
@@ -249,9 +252,9 @@ card := texas_holdem.GetACard(texas_holdem.COLOR_HEART, texas_holdem.NUMBER_8)
 ## 💫func GetColor(colorStr string) Color
 - 获得color
 - @param
-    - colorStr: color的名称
+  - colorStr: color的名称
 - @return
-    - 返回Color
+  - 返回Color
 
 ```go
 color := texas_holdem.GetColor(texas_holdem.COLOR_HEART)
@@ -260,9 +263,9 @@ color := texas_holdem.GetColor(texas_holdem.COLOR_HEART)
 ## 💫func GetNumber(numberStr string) Number
 - 获得number
 - @param
-    - numberStr: number的名称
+  - numberStr: number的名称
 - @return
-    - 返回Number
+  - 返回Number
 
 ```go
 number := texas_holdem.GetNumber(texas_holdem.NUMBER_ACE)
@@ -277,74 +280,74 @@ number := texas_holdem.GetNumber(texas_holdem.NUMBER_ACE)
 
 > 模拟数据
 ```go
-func mockCards() [][]texas_holdem.Card {  
-    // ♠K ♥8 ♥10 ♣7 ♥5  
-    var publicCards = []texas_holdem.Card{  
-       texas_holdem.GetACard(texas_holdem.COLOR_SPADE, texas_holdem.NUMBER_KING),  
-       texas_holdem.GetACard(texas_holdem.COLOR_HEART, texas_holdem.NUMBER_8),  
-       texas_holdem.GetACard(texas_holdem.COLOR_HEART, texas_holdem.NUMBER_10),  
-       texas_holdem.GetACard(texas_holdem.COLOR_CLUB, texas_holdem.NUMBER_7),  
-       texas_holdem.GetACard(texas_holdem.COLOR_HEART, texas_holdem.NUMBER_5),  
-    }  
-  
-    // ♠K ♥K ♠8 ♥8 ♥10 ♣7 ♥5  
-    var card0 = append(publicCards,  
-       []texas_holdem.Card{  
-          texas_holdem.GetACard(texas_holdem.COLOR_HEART, texas_holdem.NUMBER_KING),  
-          texas_holdem.GetACard(texas_holdem.COLOR_SPADE, texas_holdem.NUMBER_8),  
-       }...)  
-  
-    // ♠K ♣K ♥8 ♣8 ♥10 ♣7 ♥5  
-    var card1 = append(publicCards,  
-       []texas_holdem.Card{  
-          texas_holdem.GetACard(texas_holdem.COLOR_CLUB, texas_holdem.NUMBER_KING),  
-          texas_holdem.GetACard(texas_holdem.COLOR_CLUB, texas_holdem.NUMBER_8),  
-       }...)  
-  
-    // ♥5 ♦5 ♠K ���J ♥10 ♥8 ♣7  
-    var card2 = append(publicCards,  
-       []texas_holdem.Card{  
-          texas_holdem.GetACard(texas_holdem.COLOR_HEART, texas_holdem.NUMBER_JACK),  
-          texas_holdem.GetACard(texas_holdem.COLOR_DIAMOND, texas_holdem.NUMBER_5),  
-       }...)  
-  
-    // ♥10 ♥8 ♥5 ♥4 ♥2 ♠K ♣7  
-    var card3 = append(publicCards,  
-       []texas_holdem.Card{  
-          texas_holdem.GetACard(texas_holdem.COLOR_HEART, texas_holdem.NUMBER_4),  
-          texas_holdem.GetACard(texas_holdem.COLOR_HEART, texas_holdem.NUMBER_2),  
-       }...)  
-  
-    // ♥10 ♥9 ♥8 ♥6 ♥5 ♠K ♣7  
-    var card4 = append(publicCards,  
-       []texas_holdem.Card{  
-          texas_holdem.GetACard(texas_holdem.COLOR_HEART, texas_holdem.NUMBER_9),  
-          texas_holdem.GetACard(texas_holdem.COLOR_HEART, texas_holdem.NUMBER_6),  
-       }...)  
-  
-    return [][]texas_holdem.Card{card0, card1, card2, card3, card4}  
+func mockCards() [][]texas_holdem.Card {
+// ♠K ♥8 ♥10 ♣7 ♥5  
+var publicCards = []texas_holdem.Card{
+texas_holdem.GetACard(texas_holdem.COLOR_SPADE, texas_holdem.NUMBER_KING),
+texas_holdem.GetACard(texas_holdem.COLOR_HEART, texas_holdem.NUMBER_8),
+texas_holdem.GetACard(texas_holdem.COLOR_HEART, texas_holdem.NUMBER_10),
+texas_holdem.GetACard(texas_holdem.COLOR_CLUB, texas_holdem.NUMBER_7),
+texas_holdem.GetACard(texas_holdem.COLOR_HEART, texas_holdem.NUMBER_5),
+}
+
+// ♠K ♥K ♠8 ♥8 ♥10 ♣7 ♥5  
+var card0 = append(publicCards,
+[]texas_holdem.Card{
+texas_holdem.GetACard(texas_holdem.COLOR_HEART, texas_holdem.NUMBER_KING),
+texas_holdem.GetACard(texas_holdem.COLOR_SPADE, texas_holdem.NUMBER_8),
+}...)
+
+// ♠K ♣K ♥8 ♣8 ♥10 ♣7 ♥5  
+var card1 = append(publicCards,
+[]texas_holdem.Card{
+texas_holdem.GetACard(texas_holdem.COLOR_CLUB, texas_holdem.NUMBER_KING),
+texas_holdem.GetACard(texas_holdem.COLOR_CLUB, texas_holdem.NUMBER_8),
+}...)
+
+// ♥5 ♦5 ♠K ���J ♥10 ♥8 ♣7  
+var card2 = append(publicCards,
+[]texas_holdem.Card{
+texas_holdem.GetACard(texas_holdem.COLOR_HEART, texas_holdem.NUMBER_JACK),
+texas_holdem.GetACard(texas_holdem.COLOR_DIAMOND, texas_holdem.NUMBER_5),
+}...)
+
+// ♥10 ♥8 ♥5 ♥4 ♥2 ♠K ♣7  
+var card3 = append(publicCards,
+[]texas_holdem.Card{
+texas_holdem.GetACard(texas_holdem.COLOR_HEART, texas_holdem.NUMBER_4),
+texas_holdem.GetACard(texas_holdem.COLOR_HEART, texas_holdem.NUMBER_2),
+}...)
+
+// ♥10 ♥9 ♥8 ♥6 ♥5 ♠K ♣7  
+var card4 = append(publicCards,
+[]texas_holdem.Card{
+texas_holdem.GetACard(texas_holdem.COLOR_HEART, texas_holdem.NUMBER_9),
+texas_holdem.GetACard(texas_holdem.COLOR_HEART, texas_holdem.NUMBER_6),
+}...)
+
+return [][]texas_holdem.Card{card0, card1, card2, card3, card4}  
 }
 ```
 
 > 使用示例
 ```go
-package main  
-  
-import (  
-    "github.com/oceanSimple/texas_holdem"  
-    "github.com/stretchr/testify/assert"    
-    "testing"
-)  
-  
-func TestHandler(t *testing.T) {  
-    var cards = mockCards()  
-    var handler = texas_holdem.GetAHandler()  
-  
-    twoCardsFlag, _ := handler.CompareTwoCards(cards[0], cards[1])  
-    assert.Equal(t, 0, twoCardsFlag)  
-  
-    maxCardIndex, _ := handler.GetMaxCard(cards)  
-    assert.Equal(t, 4, maxCardIndex[0])  
+package main
+
+import (
+  "github.com/oceanSimple/texas_holdem"
+  "github.com/stretchr/testify/assert"
+  "testing"
+)
+
+func TestHandler(t *testing.T) {
+  var cards = mockCards()
+  var handler = texas_holdem.GetAHandler()
+
+  twoCardsFlag, _ := handler.CompareTwoCards(cards[0], cards[1])
+  assert.Equal(t, 0, twoCardsFlag)
+
+  maxCardIndex, _ := handler.GetMaxCard(cards)
+  assert.Equal(t, 4, maxCardIndex[0])
 }
 ```
 
